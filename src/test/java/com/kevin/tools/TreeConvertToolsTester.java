@@ -1,12 +1,17 @@
 package com.kevin.tools;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by Administrator on 1/16/2018.
  */
 public class TreeConvertToolsTester {
+    private static ObjectMapper objectMapper = new ObjectMapper();
 
     public static void main(String[] args) {
         List<Node> testList = new ArrayList<>();
@@ -54,46 +59,8 @@ public class TreeConvertToolsTester {
 
         // @formatter:on
 
-        /*testList.add(t1);
-        testList.add(t11);
-        testList.add(t12);
-        testList.add(t13);
-        testList.add(t14);
-        testList.add(t2);
-        testList.add(t21);
-        testList.add(t22);
-        testList.add(t221);
-        testList.add(t222);
-        testList.add(t2221);
-        testList.add(t2222);
-        testList.add(t2223);
-        testList.add(t22221);
-        testList.add(t22222);
-        testList.add(t22223);
-        testList.add(t22224);
-        testList.add(t23);
-        testList.add(t24);
-        testList.add(t3);
         testList.add(t4);
-        testList.add(t41);
-        testList.add(t411);
-        testList.add(t412);
-        testList.add(t413);
-        testList.add(t414);
-        testList.add(t415);
-        testList.add(t42);
-        testList.add(t43);
-        testList.add(t431);
-        testList.add(t432);
-        testList.add(t4321);
-        testList.add(t4322);
         testList.add(t4323);
-        testList.add(t4324);
-        testList.add(t4325);
-        testList.add(t433);*/
-
-        testList.add(t4323);
-        testList.add(t12);
         testList.add(t411);
         testList.add(t13);
         testList.add(t22223);
@@ -101,40 +68,85 @@ public class TreeConvertToolsTester {
         testList.add(t221);
         testList.add(t4322);
         testList.add(t432);
-        testList.add(t413);
-        testList.add(t2221);
-        testList.add(t415);
+        testList.add(t22222);
+        testList.add(t222);
         testList.add(t2222);
-        testList.add(t14);
         testList.add(t4325);
+        testList.add(t413);
         testList.add(t1);
-        testList.add(t22222);
+        testList.add(t41);
         testList.add(t11);
+        testList.add(t2223);
         testList.add(t22224);
         testList.add(t23);
-        testList.add(t414);
         testList.add(t22);
         testList.add(t4324);
-        testList.add(t222);
-        testList.add(t3);
-        testList.add(t4);
-        testList.add(t41);
+        testList.add(t24);
+        testList.add(t412);
+        testList.add(t415);
+        testList.add(t12);
+        testList.add(t414);
         testList.add(t42);
+        testList.add(t14);
         testList.add(t43);
+        testList.add(t2221);
         testList.add(t431);
         testList.add(t22221);
         testList.add(t4321);
         testList.add(t433);
         testList.add(t2);
-        testList.add(t24);
-        testList.add(t412);
-        testList.add(t2223);
+        testList.add(t3);
 
         List<Node> rootNodeList = TreeConvertTools.convertToTree(testList);
-        List<Option> options = TreeConvertTools.toTreeString(rootNodeList);
+        try {
+            System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(rootNodeList));
+            System.out.println("--------------------------------------------\n\n");
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        List<Option> options = toTreeString(rootNodeList);
 
         for (Option option : options) {
             System.out.println(option);
         }
+    }
+
+    public static List<Option> toTreeString(List<Node> rootNodeList) {
+        List<Option> options = new ArrayList<>();
+        Collections.sort(rootNodeList);
+
+        for (Node node : rootNodeList) {
+            options.addAll(toNodeString(node, 0));
+        }
+
+        return options;
+    }
+
+    private static List<Option> toNodeString(Node node, int level) {
+        List<Option> options = new ArrayList<>();
+        Collections.sort(options);
+        StringBuffer strBuffer = new StringBuffer();
+
+        for (int num = 0; num < level - 1; num++) {
+            strBuffer.append("  ");
+        }
+
+        if (level > 0) {
+            strBuffer.append(" |--  ");
+        }
+
+        strBuffer.append(node.getLabel());
+        options.add(new Option(strBuffer.toString(), node.getId()));
+        List<Node> childNodes = node.getChildNodes();
+        Collections.sort(childNodes);
+
+        if (childNodes.size() > 0) {
+            for (Node childNode : childNodes) {
+                options.addAll(toNodeString(childNode, level + 1));
+            }
+        }
+
+        return options;
     }
 }

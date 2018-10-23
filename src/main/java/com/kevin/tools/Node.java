@@ -4,27 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Administrator on 1/16/2018.
+ * @author Kevin
+ * @date 1/16/2018
  */
-public class Node {
+public class Node implements Comparable<Node> {
 
     private String id;
 
     private String pid;
 
-    private String name;
+    private String label;
 
-    private String value;
+    private Object value;
 
     private List<Node> childNodes = new ArrayList<>();
 
-    public Node() {
+    public Node(String id) {
+        this.id = id;
     }
 
-    public Node(String pid, String id, String name, String value) {
+    public Node(String pid, String id, String label, Object value) {
         this.pid = pid;
         this.id = id;
-        this.name = name;
+        this.label = label;
         this.value = value;
     }
 
@@ -44,12 +46,12 @@ public class Node {
         this.pid = pid;
     }
 
-    public String getName() {
-        return name;
+    public String getLabel() {
+        return label;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     public List<Node> getChildNodes() {
@@ -60,11 +62,24 @@ public class Node {
         this.childNodes = childNodes;
     }
 
-    public String getValue() {
+    public Object getValue() {
         return value;
     }
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    @Override
+    public int compareTo(Node o) {
+        if (this.label == null && o.getLabel() == null) {
+            return 0;
+        } else if (this.label == null) {
+            return -1;
+        } else if (o.getLabel() == null) {
+            return 1;
+        } else {
+            return this.label.compareTo(o.getLabel());
+        }
     }
 }

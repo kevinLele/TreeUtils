@@ -3,7 +3,7 @@ package com.kevin.tools;
 /**
  * Created by Administrator on 1/16/2018.
  */
-public class Option {
+public class Option implements Comparable<Option> {
 
     private String key;
 
@@ -36,5 +36,18 @@ public class Option {
     @Override
     public String toString() {
         return key + ":" + value;
+    }
+
+    @Override
+    public int compareTo(Option o) {
+        if (this.value == null && o.getValue() == null) {
+            return 0;
+        } else if (this.value == null) {
+            return -1;
+        } else if (o.getValue() == null) {
+            return 1;
+        } else {
+            return this.value.compareTo(o.getValue());
+        }
     }
 }
