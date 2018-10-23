@@ -99,6 +99,7 @@ public class TreeConvertToolsTester {
 
         List<Node> rootNodeList = TreeConvertTools.convertToTree(testList);
         try {
+            sortNodeChildrens(rootNodeList);
             System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(rootNodeList));
             System.out.println("--------------------------------------------\n\n");
         } catch (JsonProcessingException e) {
@@ -110,6 +111,14 @@ public class TreeConvertToolsTester {
         for (Option option : options) {
             System.out.println(option);
         }
+    }
+
+    public static void sortNodeChildrens(List<Node> rootNodeList){
+        Collections.sort(rootNodeList);
+
+        rootNodeList.forEach(node -> {
+            sortNodeChildrens(node.getChildNodes());
+        });
     }
 
     public static List<Option> toTreeString(List<Node> rootNodeList) {
